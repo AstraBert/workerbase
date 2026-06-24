@@ -1,7 +1,7 @@
 {
 	"name": "@cle-does-things/workerbase-mcp",
 	"description": "Local MCP server for workerbase, a knowledge base running on Cloudflare workers",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"author": {
 		"name": "Clelia Astra Bertelli",
 		"url": "https://github.com/AstraBert"
