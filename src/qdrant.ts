@@ -81,10 +81,30 @@ export class QdrantWorkerClient {
 			.path('/collections/{collection_name}/points/query')
 			.method('post')
 			.create();
-		const res = await call({
-			collection_name: collection,
-			...args,
-		});
+		let res;
+		try {
+			res = await call({
+				collection_name: collection,
+				...args,
+			});
+		} catch (err) {
+			// openapi-typescript-fetch throws ApiError with the parsed body in `.data`.
+			// Surface Qdrant's actual error so we don't lose it behind a generic 400.
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const anyErr = err as any;
+			const status = anyErr?.status ?? anyErr?.response?.status;
+			const body = anyErr?.data ?? anyErr?.response?.data;
+			console.error('Qdrant query failed', {
+				status,
+				body,
+				sentArgs: args,
+			});
+			throw new Error(
+				`Qdrant query failed (status ${status}): ${
+					typeof body === 'string' ? body : JSON.stringify(body)
+				}`,
+			);
+		}
 		const data = res?.data?.result;
 		if (!data) throw new Error('Qdrant query returned no result');
 		return data;

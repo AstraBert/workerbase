@@ -1,18 +1,16 @@
-import { readFile } from 'fs/promises';
-
-async function store() {
+async function retrieve() {
+	const file_key = process.argv[2];
 	const job = {
 		payload: {
-			type: 'store',
-			file_name: 'invoice.pdf',
-			file_type: 'application/pdf',
-			metadata: { type: 'invoice', department: 'finance' },
+			type: 'retrieve',
+			file_key: file_key != '' ? file_key : undefined,
+			query: 'Heavy cream',
+			top_k: 3,
+			filters: [{ field: 'type', operator: 'eq', value: 'invoice' }],
 		},
 	};
-	const blob = new Blob([await readFile('scripts/data/invoice.pdf')], { type: 'application/pdf' });
 	const formData = new FormData();
 	formData.append('job', JSON.stringify(job));
-	formData.append('file', blob, 'invoice.pdf');
 	const response = await fetch(process.env.WORKER_URL ?? 'http://localhost:8787/', {
 		method: 'POST',
 		headers: {
@@ -28,4 +26,4 @@ async function store() {
 	console.log(JSON.stringify(data, undefined, 2));
 }
 
-store().catch(console.error);
+retrieve().catch(console.error);

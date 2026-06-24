@@ -206,7 +206,6 @@ export default {
 
 /** Tags an error with a `step` label so the outer handler can report which call site failed. */
 async function step<T>(label: string, fn: () => Promise<T> | T): Promise<T> {
-	console.log(label);
 	try {
 		return await fn();
 	} catch (err) {
@@ -282,9 +281,6 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
 			}
 			const file_type = validatedJob.payload.file_type;
 			const fileKey = validatedJob.payload.file_name + ':' + randomUUID();
-			const metadataPayload = validatedJob.payload.metadata
-				? { file_key: fileKey, ...validatedJob.payload.metadata }
-				: { file_key: fileKey };
 			let content: string;
 			if (file_type.startsWith('text/') || TEXT_BASED_MIMETYPES.includes(file_type)) {
 				content = await step('read-text-file', () => file.text());
@@ -299,6 +295,9 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
 					headers: { 'Content-Type': 'application/json' },
 				});
 			}
+			const metadataPayload = validatedJob.payload.metadata
+				? { file_key: fileKey, ...validatedJob.payload.metadata }
+				: { file_key: fileKey };
 			const points: {
 				id: string;
 				vector: { [key: string]: { text: string; model: string } };
@@ -314,7 +313,7 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
 								model: 'qdrant/bm25',
 							},
 						},
-						payload: metadataPayload,
+						payload: { ...metadataPayload, content: slice },
 					});
 				}
 			});
@@ -404,6 +403,7 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
 				filts = undefined;
 			} else {
 				filts = buildQdrantFilter(metadataFilts);
+				console.log(JSON.stringify(filts, undefined, 2));
 			}
 			const result = await step('qdrant-query', () =>
 				qdrantClient.query(env.QDRANT_COLLECTION_NAME, {

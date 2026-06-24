@@ -6,11 +6,14 @@ async function main() {
 		apiKey: process.env.QDRANT_API_KEY!,
 	});
 	const collection = process.env.QDRANT_COLLECTION_NAME!;
-	await qdrantClient.createCollection(collection, {
-		sparse_vectors: {
-			sparse: {},
-		},
-	});
+	for (const field of process.argv.slice(2)) {
+		console.log('Creating index for', field);
+		await qdrantClient.createPayloadIndex(collection, {
+			field_name: field,
+			field_schema: 'keyword',
+			wait: true,
+		});
+	}
 }
 
 main().catch(console.error);

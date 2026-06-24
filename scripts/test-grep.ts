@@ -1,18 +1,20 @@
-import { readFile } from 'fs/promises';
-
-async function store() {
+async function grep() {
+	const file_key = process.argv[2];
+	if (!file_key) {
+		console.error('Usage: tsx retrieve.ts <file_key>');
+		process.exit(1);
+	}
 	const job = {
 		payload: {
-			type: 'store',
-			file_name: 'invoice.pdf',
-			file_type: 'application/pdf',
-			metadata: { type: 'invoice', department: 'finance' },
+			type: 'grep',
+			file_key,
+			pattern: 'qts',
+			max_matches: 2,
+			context: 10,
 		},
 	};
-	const blob = new Blob([await readFile('scripts/data/invoice.pdf')], { type: 'application/pdf' });
 	const formData = new FormData();
 	formData.append('job', JSON.stringify(job));
-	formData.append('file', blob, 'invoice.pdf');
 	const response = await fetch(process.env.WORKER_URL ?? 'http://localhost:8787/', {
 		method: 'POST',
 		headers: {
@@ -28,4 +30,4 @@ async function store() {
 	console.log(JSON.stringify(data, undefined, 2));
 }
 
-store().catch(console.error);
+grep().catch(console.error);
