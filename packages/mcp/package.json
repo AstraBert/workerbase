@@ -1,0 +1,62 @@
+{
+	"name": "@cle-does-things/workerbase-mcp",
+	"description": "Local MCP server for workerbase, a knowledge base running on Cloudflare workers",
+	"version": "0.0.0",
+	"author": {
+		"name": "Clelia Astra Bertelli",
+		"url": "https://github.com/AstraBert"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AstraBert/workerbase.git"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/AstraBert/workerbase/issues"
+	},
+	"homepage": "https://github.com/AstraBert/workerbase#readme",
+	"keywords": [
+		"knowledge-base",
+		"retrieval",
+		"qdrant",
+		"liteparse",
+		"mcp"
+	],
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"bin": "dist/index.js",
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"lint": "eslint src/",
+		"prettier": "prettier --write .",
+		"prettier:check": "prettier .",
+		"clean": "rm -rf dist",
+		"build": "yarn clean && tsc && chmod +x dist/index.js",
+		"prepublishOnly": "yarn build",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"release": "changeset publish"
+	},
+	"packageManager": "yarn@4.9.1",
+	"devDependencies": {
+		"@changesets/cli": "^2.31.0",
+		"@eslint/js": "^10.0.1",
+		"@types/node": "^26.0.0",
+		"eslint": "^10.5.0",
+		"globals": "^17.7.0",
+		"jiti": "^2.7.0",
+		"prettier": "^3.8.4",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.62.0"
+	},
+	"dependencies": {
+		"@cfworker/json-schema": "^4.1.1",
+		"@modelcontextprotocol/server": "^2.0.0-alpha.2",
+		"zod": "^4.4.3"
+	}
+}
