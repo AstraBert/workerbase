@@ -166,6 +166,16 @@ yarn tsx scripts/test-read.ts <file_key>        # raw text slice
 yarn tsx scripts/test-grep.ts <file_key>        # regex over raw text
 ```
 
+## MCP server
+
+A local [Model Context Protocol](https://modelcontextprotocol.io) server that bridges MCP-compatible clients (Claude Desktop, Cursor, …) to a deployed workerbase lives in [`packages/mcp`](./packages/mcp). It's published as [`@cle-does-things/workerbase-mcp`](https://www.npmjs.com/package/@cle-does-things/workerbase-mcp) and exposes the `store` / `read` / `grep` / `retrieve` jobs as MCP tools.
+
+```bash
+npx -y @cle-does-things/workerbase-mcp
+```
+
+See [`packages/mcp/README.md`](./packages/mcp/README.md) for configuration and client setup.
+
 ## Project layout
 
 ```
@@ -174,6 +184,8 @@ src/
   qdrant.ts         Workers-safe Qdrant client (openapi-typescript-fetch)
   types/            Ambient .d.ts for chonkie
 scripts/            One-off admin + smoke-test scripts
+packages/
+  mcp/              Local MCP server (@cle-does-things/workerbase-mcp)
 wrangler.jsonc      Worker + DO config
 *.wasm              liteparse + chonkie WASM bundles, imported by src/index.ts
 ```

@@ -11,6 +11,11 @@ async function main() {
 			sparse: {},
 		},
 	});
+	await qdrantClient.createPayloadIndex(collection, {
+		field_name: 'file_key',
+		field_schema: 'keyword',
+		wait: true,
+	});
 }
 
 main().catch(console.error);
