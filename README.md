@@ -17,7 +17,7 @@ A Cloudflare Worker that exposes a small file-storage + retrieval API backed by 
 
 - **`DurableFsObject`** — a SQLite-backed Durable Object that keeps the full extracted text for each ingested file, keyed by a generated `file_key`. Used by `read` and `grep`.
 - **Qdrant collection** — stores per-chunk BM25 sparse vectors plus metadata (`file_key`, plus any caller-provided fields). Used by `retrieve`.
-- **`src/qdrant.ts`** — a minimal Workers-compatible Qdrant client built on `@qdrant/openapi-typescript-fetch`. The official `@qdrant/js-client-rest` default ESM entry pulls in `undici` and crashes workerd, so we only use it for its types.
+- **`src/qdrant.ts`** — a minimal Workers-compatible Qdrant client built on `@qdrant/openapi-typescript-fetch`
 
 ## Endpoint
 
