@@ -4,7 +4,7 @@ on:
     branches: [main]
 
 jobs:
-  lint:
+  release:
     runs-on: ubuntu-latest
     defaults:
       run:
