@@ -4,13 +4,20 @@
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
-		"dev": "wrangler dev",
+		"dev": "wrangler dev --local",
 		"start": "wrangler dev",
 		"cf-typegen": "wrangler types"
 	},
 	"devDependencies": {
 		"@types/node": "^26.0.0",
+		"tsx": "^4.22.4",
 		"typescript": "^5.5.2",
 		"wrangler": "^4.104.0"
+	},
+	"dependencies": {
+		"@chonkiejs/chunk": "^0.10.1",
+		"@llamaindex/liteparse-wasm": "^2.1.1",
+		"@qdrant/js-client-rest": "^1.18.0",
+		"zod": "^4.4.3"
 	}
 }
